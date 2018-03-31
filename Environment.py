@@ -49,8 +49,8 @@ class EnvironmentClass:
     def step( self, action ):
         
         if action == 0:
-           if self.s[1] > 0:
-               self.s[1] = self.s[0] - 1 
+            if self.s[1] > 0:
+                self.s[1] = self.s[0] - 1 
 
         elif action == 1:
             if self.s[0] < self.observation_space_n_i - 1:
