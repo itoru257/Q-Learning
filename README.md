@@ -14,8 +14,8 @@ HFFG       (G: goal, where the frisbee is located)
 2: Right  
 3: Up  
 
-### Result(Example)
+### Result
 ↓←←←  
-↓H←H  
-→→↓H  
-H←→G  
+↓H↓H  
+→↓↓H  
+H→→G  

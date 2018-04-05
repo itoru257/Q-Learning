@@ -28,10 +28,10 @@ class EnvironmentClass:
         self.action_string = ['←', '↓', '→', '↑']
 
         self.environment = []
-        self.environment.append( [ 'S', 'F', 'F', 'F' ] )         
-        self.environment.append( [ 'F', 'H', 'F', 'H' ] )         
-        self.environment.append( [ 'F', 'F', 'F', 'H' ] )         
-        self.environment.append( [ 'H', 'F', 'F', 'G' ] )         
+        self.environment.extend( [ 'S', 'F', 'F', 'F' ] )         
+        self.environment.extend( [ 'F', 'H', 'F', 'H' ] )         
+        self.environment.extend( [ 'F', 'F', 'F', 'H' ] )         
+        self.environment.extend( [ 'H', 'F', 'F', 'G' ] )         
         
         self.s = [0, 0]
         self.observation_space_n_i = 4
@@ -40,7 +40,7 @@ class EnvironmentClass:
         self.action_space_n        = 4
 
     def get_environment_index( self ):
-        return self.s[0] * self.observation_space_n_i + self.s[1]
+        return self.s[0] + self.observation_space_n_i * self.s[1]
 
     def reset( self ):
         self.s = [0, 0]
@@ -49,25 +49,25 @@ class EnvironmentClass:
     def step( self, action ):
         
         if action == 0:
-            if self.s[1] > 0:
-                self.s[1] = self.s[0] - 1 
+            if self.s[0] > 0:
+                self.s[0] = self.s[0] - 1 
 
         elif action == 1:
-            if self.s[0] < self.observation_space_n_i - 1:
-                self.s[0] = self.s[0] + 1 
+            if self.s[1] < self.observation_space_n_j - 1:
+                self.s[1] = self.s[1] + 1 
             
         elif action == 2:
-            if self.s[1] < self.observation_space_n_j - 1:
-                self.s[1] = self.s[1] + 1             
+            if self.s[0] < self.observation_space_n_i - 1:
+                self.s[0] = self.s[0] + 1             
 
         elif action == 3:
-            if self.s[0] > 0:
-               self.s[0] = self.s[0] - 1 
+            if self.s[1] > 0:
+               self.s[1] = self.s[1] - 1 
             
         d  = False
         r  = 0.0
         s1 = self.get_environment_index() 
-        e = self.environment[self.s[0]][self.s[1]]
+        e = self.environment[s1]
 
         if e == 'H':
             d = True
@@ -80,16 +80,17 @@ class EnvironmentClass:
 
     def print_Q_Action( self, Q ):
         
-        for i in range( self.observation_space_n_i ):
+        for j in range( self.observation_space_n_j ):
             text = ''
 
-            for j in range( self.observation_space_n_j ):
-                e = self.environment[i][j]
+            for i in range( self.observation_space_n_i ):
+                s = i + self.observation_space_n_i * j
+                e = self.environment[s]
 
                 if e == 'G' or e == 'H': 
                     text += e
                 else:
-                    s = i * self.observation_space_n_i + j
+                    
                     a = np.argmax(Q[s,:]) 
                     text += self.action_string[a]
     
